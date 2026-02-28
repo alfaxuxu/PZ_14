@@ -11,23 +11,28 @@
         </div>
         2026-02-26
         <div class="stats">
-            <p>Всего: {{ total }} | Прочитано: {{ completed }} | Осталось: {{ total -
-                completed }}</p>
+            <p>Всего: {{ total }} | Прочитано: {{ completed }} | 
+         В избранном: {{ favoriteCount }} | Осталось: {{ total - completed }}</p>
         </div>
     </div>
 </template>
+
 <script setup>
 import { computed } from 'vue'
 const props = defineProps(['filter', 'books'])
 defineEmits(['update:filter'])
+
 const searchQuery = defineModel('searchQuery')
+
 const filterOptions = [
     { value: 'all', label: 'Все' },
     { value: 'unread', label: 'Непрочитанные' },
-    { value: 'read', label: 'Прочитанные' }
+    { value: 'read', label: 'Прочитанные' },
+    { value: 'favorite', label: 'Избранное' }
 ]
 const total = computed(() => props.books.length)
 const completed = computed(() => props.books.filter(b => b.completed).length) 
+const favoriteCount = computed(() => props.books.filter(b => b.favorite).length)
 </script>
 <style scoped>
 .filters {

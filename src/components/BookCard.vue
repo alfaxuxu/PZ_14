@@ -1,7 +1,11 @@
 <template>
     <div class="book-card" :class="{ completed: book.completed }">
         <div class="book-info">
-            <h3>{{ book.title }}</h3>
+            <h3 style="display: inline-block; margin-right: 8px; vertical-align: middle;">{{ book.title }}</h3>
+            <span class="favorite" @click="$emit('toggle-favorite', book.id)"
+                style="display: inline-block; vertical-align: middle; line-height: 1;">
+                {{ book.favorite ? '♥' : '♡' }}
+            </span>
             <p class="author">{{ book.author }}</p>
             <span class="genre">{{ book.genre }}</span>
         </div>
@@ -21,7 +25,7 @@
 </template>
 <script setup>
 defineProps(['book'])
-defineEmits(['toggle', 'delete', 'rate']) 
+defineEmits(['toggle', 'delete', 'rate', 'toggle-favorite']) 
 </script>
 <style scoped>
 .book-card {
@@ -67,6 +71,18 @@ defineEmits(['toggle', 'delete', 'rate'])
     display: flex;
     gap: 8px;
     align-items: center;
+}
+
+.favorite {
+    font-size: 24px;
+    cursor: pointer;
+    color: rgb(255, 0, 0);
+    transition: transform 0.2s;
+    margin-right: 5px;
+}
+
+.favorite:hover {
+    transform: scale(1.2);
 }
 
 .rating {

@@ -13,7 +13,7 @@
       </div>
       <div v-else class="books-list">
         <BookCard v-for="book in filteredBooks" :key="book.id" :book="book" @toggle="toggleBook(book.id)"
-          @delete="deleteBook(book.id)" @rate="rateBook(book.id, $event)" />
+          @delete="deleteBook(book.id)" @rate="rateBook(book.id, $event)" @toggle-favorite="toggleFavorite" />
       </div>
     </main>
   </div>
@@ -43,7 +43,8 @@ const addBook = (bookData) => {
     id: Date.now(),
     ...bookData,
     completed: false,
-    rating: 0
+    rating: 0,
+    favorite: false
   }
   books.value.push(newBook)
 }
@@ -64,6 +65,15 @@ const rateBook = (id, rating) => {
     book.rating = rating
   }
 }
+
+// Переключение избранного
+const toggleFavorite = (id) => {
+  const book = books.value.find(b => b.id === id)
+  if (book) {
+    book.favorite = !book.favorite
+  }
+}
+
 // Удаление книги 
 const deleteBook = (id) => {
   if (confirm('Удалить книгу?')) {
@@ -76,6 +86,7 @@ const filteredBooks = computed(() => {
     .filter(book => {
       if (currentFilter.value === 'unread') return !book.completed
       if (currentFilter.value === 'read') return book.completed
+      if (currentFilter.value === 'favorite') return book.favorite
       return true
     })
     .filter(book => {
@@ -84,8 +95,9 @@ const filteredBooks = computed(() => {
       return book.title.toLowerCase().includes(query) ||
         book.author.toLowerCase().includes(query)
     })
-})
+}) 
 </script>
+
 <style>
 * {
   margin: 0;
